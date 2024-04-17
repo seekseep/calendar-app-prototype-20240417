@@ -2,7 +2,7 @@
 
 import { format } from 'date-fns'
 
-import { Card, Container, Stack, Typography } from '@mui/material'
+import { Card, Container, Stack, Typography, useTheme } from '@mui/material'
 import { ja as locale } from 'date-fns/locale'
 
 import { CalendarSchedule } from '@/types/schedule'
@@ -18,7 +18,7 @@ export default function ScheduleList ({
   onSelectSchedule: (schedule: CalendarSchedule) => any
   schduels?: CalendarSchedule[]
 }) {
-
+  const theme = useTheme()
   const rows = useRows(month, schduels)
 
   return (
@@ -40,9 +40,18 @@ export default function ScheduleList ({
               <Typography variant="caption">{format(row.date, 'E', { locale })}</Typography>
               <Typography variant="h6">{format(row.date, 'd')}</Typography>
             </Stack>
-            <Stack flexGrow={1} pr={1}>
+            <Stack flexGrow={1} pr={1} spacing={0.5}>
               {row.schedules.map(schedule => (
-                <Card variant="outlined" key={schedule.id} sx={{ p: 1 }} onClick={() => onSelectSchedule(schedule)}>
+                <Card
+                  variant="outlined"
+                  key={schedule.id}
+                  sx={{
+                    p          : 1,
+                    bgcolor    : theme.palette.primary.main,
+                    color      : theme.palette.primary.contrastText,
+                    borderColor: theme.palette.primary.dark,
+                  }}
+                  onClick={() => onSelectSchedule(schedule)}>
                   <Stack>
                     <Stack direction="row" spacing={1}>
                       <Typography variant="h6">{format(schedule.startedAt, 'HH:mm')}</Typography>
