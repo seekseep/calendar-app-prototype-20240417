@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react'
 
-import Navigation from '../components/Navigation'
+import Navigation from '../../components/Navigation'
 
 export default function TeamLayout ({
   children
