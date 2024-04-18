@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { Noto_Sans_JP } from 'next/font/google'
-import { ReactNode, Suspense } from 'react'
+import { ReactNode } from 'react'
 
-import { CircularProgress, CssBaseline } from '@mui/material'
+import { CssBaseline } from '@mui/material'
 
 import Provider from '../components/Provider'
 
@@ -22,11 +22,9 @@ export default function RootLayout({
     <html lang="ja">
       <body className={notoSansJp.className}>
         <CssBaseline />
-        <Suspense fallback={<CircularProgress />}>
-          <Provider>
-            {children}
-          </Provider>
-        </Suspense>
+        <Provider>
+          {children}
+        </Provider>
       </body>
     </html>
   )

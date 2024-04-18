@@ -1,6 +1,14 @@
+'use client'
+
 import Link from 'next/link'
 
-import { Button, Container, Stack, TextField, Typography } from '@mui/material'
+import {
+  Button,
+  Container,
+  Stack,
+  TextField,
+  Typography
+} from '@mui/material'
 
 export default function Login () {
   return (
