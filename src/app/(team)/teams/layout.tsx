@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { Navigation } from '@mui/icons-material'
+import Navigation from '../components/Navigation'
 
 export default function TeamLayout ({
   children
