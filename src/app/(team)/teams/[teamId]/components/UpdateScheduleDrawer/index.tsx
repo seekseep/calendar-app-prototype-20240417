@@ -1,9 +1,28 @@
 'use client'
 
 import { format } from 'date-fns'
+import { useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 
-import { Button, Chip, Container, Drawer, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
+import {
+  Button,
+  Chip,
+  Container,
+  Dialog,
+  DialogTitle,
+  Drawer,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+  List,
+  ListItem,
+  ListItemButton,
+  DialogContent,
+} from '@mui/material'
 
 import { CalendarSchedule } from '@/types/schedule'
 
@@ -19,9 +38,12 @@ type FormValues = {
 }
 
 function UpdateScheduleForm ({
-  schedule
+  schedule,
+  onCancel,
 }: {
   schedule: CalendarSchedule
+  onSubmit: (calendarSchedule: CalendarSchedule) => any
+  onCancel: () => any
 }) {
   const methods = useForm<FormValues>({
     defaultValues: {
@@ -40,9 +62,14 @@ function UpdateScheduleForm ({
   const repeatFinishType = methods.watch('repeatFinishType')
   const repeatWeekdays = methods.watch('repeatWeekdays')
 
+  const [confirmOpen, setConfirmOpen] = useState(false)
+
   return (
+    <>
     <FormProvider {...methods}>
-    <Stack direction="column" spacing={2}>
+    <Stack direction="column" spacing={2} component="form" onSubmit={methods.handleSubmit(() => {
+      setConfirmOpen(true)
+    })}>
       <Typography variant="h6">予定の登録</Typography>
       <TextField size="small" label="日付" type="date" {...methods.register('date')}  />
       <Stack direction="row" spacing={1} alignItems="center">
@@ -128,11 +155,32 @@ function UpdateScheduleForm ({
           type="number"
           {...methods.register('repeatCount')} />
       )}
-      <Stack justifyContent="end" direction="row">
-        <Button type="button" variant="contained">登録する</Button>
+      <Stack justifyContent="end" direction="row" spacing={2}>
+        <Button type="button" variant="text" onClick={onCancel}>閉じる</Button>
+        <Button type="submit" variant="contained">保存する</Button>
       </Stack>
     </Stack>
   </FormProvider>
+  <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+    <DialogTitle>繰り返しの変更</DialogTitle>
+    <DialogContent>
+      <List dense>
+        <ListItem disableGutters>
+          <ListItemButton onClick={onCancel}>すべての予定を変更</ListItemButton>
+        </ListItem>
+        <ListItem disableGutters>
+          <ListItemButton onClick={onCancel}>この予定を変更</ListItemButton>
+        </ListItem>
+        <ListItem disableGutters>
+          <ListItemButton onClick={onCancel}>これ以降の予定を変更</ListItemButton>
+        </ListItem>
+        <ListItem disableGutters>
+          <ListItemButton onClick={() => setConfirmOpen(false)}>変更しない</ListItemButton>
+        </ListItem>
+      </List>
+    </DialogContent>
+  </Dialog>
+  </>
   )
 }
 
@@ -140,8 +188,10 @@ export default function UpdateScheduleDrawer ({
   schedule,
   open,
   toggle,
+  onSubmit
 }: {
   schedule: CalendarSchedule | null
+  onSubmit: (calendarSchedule: CalendarSchedule) => any
   open: boolean
   toggle: () => any
 }) {
@@ -154,7 +204,12 @@ export default function UpdateScheduleDrawer ({
         sx={{
           p: 2
         }}>
-        {(open && schedule) && <UpdateScheduleForm schedule={schedule} />}
+        {(open && schedule) && (
+          <UpdateScheduleForm
+            schedule={schedule}
+            onCancel={toggle}
+            onSubmit={onSubmit} />
+        )}
       </Container>
     </Drawer>
   )

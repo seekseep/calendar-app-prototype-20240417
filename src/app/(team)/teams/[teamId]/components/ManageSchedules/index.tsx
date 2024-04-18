@@ -49,6 +49,7 @@ export default function ManageSchedules ({ teamId }: { teamId: string }) {
       <UpdateScheduleDrawer
         open={!!selectedSchedule}
         schedule={selectedSchedule}
+        onSubmit={() => null}
         toggle={() => setSelectedSchedule(null)} />
     </>
   )
